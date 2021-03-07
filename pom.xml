@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.com.viavarejo</groupId>
+	<artifactId>vv-kafka-connector</artifactId>
+	<version>1.0.0.1</version>
+	<name>vv-kafka-connector</name>
+	<packaging>jar</packaging>
+	<description>Modulo para comunicação com Kafka</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<jacoco-maven-plugin-version>0.8.1</jacoco-maven-plugin-version>
+		<dockerfile-maven-plugin-version>1.4.3</dockerfile-maven-plugin-version>
+		<docker-maven-plugin-version>1.1.1</docker-maven-plugin-version>
+		<vv-core-version>1.3.0.3</vv-core-version>
+		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<maven-surefire-plugin-version>2.21.0</maven-surefire-plugin-version>
+		<docker.image.name>${project.artifactId}</docker.image.name>
+		<docker.image.tag>latest</docker.image.tag>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<docencoding>UTF-8</docencoding>
+
+		<sonar.host>http://sonar-viamais-ci.ocp-eqx.dc.nova</sonar.host>
+		<sonar.language>java</sonar.language>
+		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+
+		<git.host>http://bitbucket.viavarejo.com.br</git.host>
+		<git.url>${git.host}/scm/lfaj/${project.artifactId}.git</git.url>
+
+		<jenkins.host>http://jenkins.viavarejo.com.br</jenkins.host>
+		<jenkins.url>${jenkins.host}/job/Loja%20Física%20-%20API%20-%20Jornada/job/${project.artifactId}/</jenkins.url>
+
+		<nexus.host>http://nexus.viavarejo.com.br</nexus.host>
+		<nexus.libsPublicLocalUrl>${nexus.host}/repository/public/</nexus.libsPublicLocalUrl>
+		<nexus.libsReleasesLocalUrl>${nexus.host}/repository/releases/</nexus.libsReleasesLocalUrl>
+		<nexus.libsSnapshotsLocalUrl>${nexus.host}/repository/snapshots/</nexus.libsSnapshotsLocalUrl>
+	
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<docencoding>UTF-8</docencoding>
+
+		<maven-resources-plugin-version>3.0.2</maven-resources-plugin-version>
+		<maven-compiler-plugin-version>3.6.1</maven-compiler-plugin-version>
+		<maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+		<guava-version>26.0-jre</guava-version>		
+		<sonar.host>http://sonar-viamais-ci.ocp-eqx.dc.nova</sonar.host>
+		<sonar.language>java</sonar.language>
+		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+
+        <start-class>br.com.viavarejo.Application</start-class>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<scm>
+		<url>${git.url}</url>
+	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal Releases</name>
+			<url>${nexus.libsReleasesLocalUrl}</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Internal Snapshot</name>
+			<url>${nexus.libsSnapshotsLocalUrl}</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>ViaVarejo</id>
+			<url>${nexus.libsPublicLocalUrl}</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ViaVarejo</id>
+			<url>${nexus.libsPublicLocalUrl}</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>ViaVarejo-snapshots</id>
+			<url>${nexus.libsPublicLocalUrl}</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>${jenkins.url}</url>
+	</ciManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin-version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin-version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+	</build>
+</project>
